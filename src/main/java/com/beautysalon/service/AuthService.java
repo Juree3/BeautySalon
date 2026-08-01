@@ -5,6 +5,8 @@ import com.beautysalon.dto.LoginResponse;
 import com.beautysalon.dto.RegisterRequest;
 import com.beautysalon.entity.User;
 import com.beautysalon.enums.Role;
+import com.beautysalon.exception.EmailAlreadyExistsException;
+import com.beautysalon.exception.InvalidCredentialsException;
 import com.beautysalon.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class AuthService {
     public void register(RegisterRequest request) {
 
     if(userRepository.existsByEmail(request.getEmail())) {
-        throw new RuntimeException("Uneseni Email se vec koristi");
+        throw new EmailAlreadyExistsException("Email se već koristi");
     }
 
         User user = new User();
@@ -41,10 +43,11 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RuntimeException("Email ili lozinka nisu tocni"));
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Pogrešan email ili lozinka"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Email ili lozinka nisu tocni");
+            throw new InvalidCredentialsException("Pogrešan email ili lozinka");
         }
 
         String token=jwtService.generateToken(user.getEmail(), user.getRole().name());
