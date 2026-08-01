@@ -1,5 +1,7 @@
 package com.beautysalon.controller;
 
+import com.beautysalon.dto.LoginRequest;
+import com.beautysalon.dto.LoginResponse;
 import com.beautysalon.dto.RegisterRequest;
 import com.beautysalon.service.AuthService;
 import jakarta.validation.Valid;
@@ -21,5 +23,10 @@ public class AuthController {
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = authService.login(request);
+        return ResponseEntity.ok().body(response);
     }
 }
