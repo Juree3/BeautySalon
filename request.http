@@ -2,10 +2,10 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "fullName": "Ana Anić",
-  "email": "ana@test.com",
+  "fullName": "Gaba Stjepanovic",
+  "email": "gaba@test.com",
   "password": "lozinka123",
-  "phone": "061123456"
+  "phone": "063682394"
 }
 
 ### Login
@@ -13,6 +13,10 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "ana@test.com",
+  "email": "jure@test.com",
   "password": "lozinka123"
 }
+
+### test
+GET http://localhost:8080/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqdXJlQHRlc3QuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzg1Nzg1OTY4LCJleHAiOjE3ODU4NzIzNjh9.sLUgEJvqyMKaEvyIckrJfSIbGUwCOWnTzwQam82YgzpaF-y5RMmmQ_fumBQqy1Ha

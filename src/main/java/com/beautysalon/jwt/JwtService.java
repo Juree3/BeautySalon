@@ -14,12 +14,12 @@ import java.util.Date;
 public class JwtService {
 
     @Value("${jwt.secret}")
-    private String secret;
+    private  String secret;
 
     @Value("${jwt.expiration}")
     private long expiration;
 
-    private SecretKey getSigningKey() {
+    private  SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -36,7 +36,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractEmail(String token) {
+    public  String extractEmail(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
