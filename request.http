@@ -7,6 +7,17 @@ Content-Type: application/json
   "password": "lozinka123",
   "phone": "063682394"
 }
+### register
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+"fullName": "Test Korisnik",
+"email": "test@test.com",
+"password": "lozinka123",
+"phone": "0611234567"
+}
 
 ### Login
 POST http://localhost:8080/api/auth/login
