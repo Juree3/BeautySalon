@@ -13,8 +13,8 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-"fullName": "Test Korisnik",
-"email": "test@test.com",
+"fullName": "Test Staff",
+"email": "staff@staff.com",
 "password": "lozinka123",
 "phone": "0611234567"
 }
@@ -24,10 +24,49 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "jure@test.com",
+  "email": "staff@staff.com",
   "password": "lozinka123"
 }
 
 ### test
 GET http://localhost:8080/api/users/me
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqdXJlQHRlc3QuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzg1Nzg1OTY4LCJleHAiOjE3ODU4NzIzNjh9.sLUgEJvqyMKaEvyIckrJfSIbGUwCOWnTzwQam82YgzpaF-y5RMmmQ_fumBQqy1Ha
+
+### kreiraj uslugu
+POST http://localhost:8080/api/services
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+
+{
+  "name": "French",
+  "description": "Izrada gel noktiju",
+  "durationMinutes": 45,
+  "price": 35.00,
+  "imageUrl": "https://example.com/nokti.jpg"
+}
+
+### dohvati sve aktivne (customer view)
+GET http://localhost:8080/api/services
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+
+### dohvati moje usluge (staff view)
+GET http://localhost:8080/api/services/my
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+
+### uredi uslugu (stavi id koji si dobio pri create)
+PUT http://localhost:8080/api/services/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+
+{
+  "id": 1,
+  "name": "Gel nokti - novi set",
+  "description": "Izmijenjeni opis",
+  "durationMinutes": 60,
+  "price": 30.00,
+  "imageUrl": "https://example.com/nokti2.jpg"
+}
+
+### ugasi uslugu (soft delete)
+DELETE http://localhost:8080/api/services/1
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-

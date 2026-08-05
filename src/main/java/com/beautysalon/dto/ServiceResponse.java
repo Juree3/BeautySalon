@@ -15,4 +15,5 @@ public class ServiceResponse {
     private BigDecimal price;
     private String imageUrl;
     private Long staffId;
+    private Boolean active;
 }
