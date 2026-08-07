@@ -91,3 +91,16 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb
 ### obriši (id iz create odgovora)
 DELETE http://localhost:8080/api/work-slots/1
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMTE5NjgsImV4cCI6MTc4NjE5ODM2OH0.WPhPib-0DvqIwvSRqGmkztl5MkZQ0I19MwwliedaICcdjETyCT0R_e7Wwy_IVT6v
+
+### slika
+
+POST http://localhost:8080/api/images/upload
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMjAwNTgsImV4cCI6MTc4NjIwNjQ1OH0.etqZBxJSKh5Kj_tutCXJLiN39li6rLNjfVOSzEDbNm-Uy-pCyEwvJfE4arPURgC-
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.png"
+Content-Type: image/png
+
+< /Users/jurica/Desktop/test.png
+--WebAppBoundary--
