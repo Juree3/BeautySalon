@@ -1,16 +1,9 @@
 package com.beautysalon.controller;
 
-
 import com.beautysalon.dto.ServiceRequest;
 import com.beautysalon.dto.ServiceResponse;
-import com.beautysalon.entity.Service;
-import com.beautysalon.repository.ServiceRepository;
 import com.beautysalon.service.ServiceService;
-import jakarta.validation.Valid;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/services")
 public class ServiceController {
+
     private final ServiceService serviceService;
 
 
@@ -25,14 +19,18 @@ public class ServiceController {
         this.serviceService = serviceService;
     }
 
+
     @PostMapping
-    public ResponseEntity<ServiceResponse> createService(@Valid @RequestBody ServiceRequest request) {
-        ServiceResponse response = serviceService.createService(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ServiceResponse create(
+            @RequestBody ServiceRequest request
+    ) {
+        return serviceService.createService(request);
     }
 
+
     @GetMapping
-    public List<ServiceResponse> getAllService() {
+    public List<ServiceResponse> getAllActive() {
         return serviceService.getAllActive();
     }
 
@@ -43,18 +41,28 @@ public class ServiceController {
     }
 
 
+    @GetMapping("/staff/{staffId}")
+    public List<ServiceResponse> getByStaff(
+            @PathVariable Long staffId
+    ) {
+        return serviceService.getActiveByStaff(staffId);
+    }
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceResponse> updateService(
+    public ServiceResponse update(
             @PathVariable Long id,
-            @Valid @RequestBody ServiceRequest request) {
-        return ResponseEntity.ok(serviceService.updateService(id, request));
+            @RequestBody ServiceRequest request
+    ) {
+        return serviceService.updateService(id, request);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Long id
+    ) {
         serviceService.deleteService(id);
-        return ResponseEntity.noContent().build();
     }
-
 }

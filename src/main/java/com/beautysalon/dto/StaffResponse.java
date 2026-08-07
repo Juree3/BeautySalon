@@ -1,15 +1,14 @@
 package com.beautysalon.dto;
 
-import com.beautysalon.enums.Role;
+import com.beautysalon.enums.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LoginResponse {
+public class StaffResponse {
 
-    private String token;
+    private Long id;
     private String fullName;
-    private Role role;
-    private String phone;
+    private Category category;
 }

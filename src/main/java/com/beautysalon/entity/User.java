@@ -1,5 +1,6 @@
 package com.beautysalon.entity;
 
+import com.beautysalon.enums.Category;
 import com.beautysalon.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -42,4 +43,9 @@ public class User {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+    @Enumerated(EnumType.STRING)
+
+    @Column(name = "category")
+    private Category category;
+
 }
