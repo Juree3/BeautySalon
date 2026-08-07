@@ -70,3 +70,24 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb
 ### ugasi uslugu (soft delete)
 DELETE http://localhost:8080/api/services/1
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+
+### login kao staff
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{ "email": "staff@staff.com", "password": "lozinka123" }
+
+### dodaj slot (kopiraj token iz logina)
+POST http://localhost:8080/api/work-slots
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMTE5NjgsImV4cCI6MTc4NjE5ODM2OH0.WPhPib-0DvqIwvSRqGmkztl5MkZQ0I19MwwliedaICcdjETyCT0R_e7Wwy_IVT6v
+
+{ "date": "2026-08-20", "startTime": "09:00", "endTime": "14:00" }
+
+### moji slotovi
+GET http://localhost:8080/api/work-slots/my
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMTE5NjgsImV4cCI6MTc4NjE5ODM2OH0.WPhPib-0DvqIwvSRqGmkztl5MkZQ0I19MwwliedaICcdjETyCT0R_e7Wwy_IVT6v
+
+### obriši (id iz create odgovora)
+DELETE http://localhost:8080/api/work-slots/1
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMTE5NjgsImV4cCI6MTc4NjE5ODM2OH0.WPhPib-0DvqIwvSRqGmkztl5MkZQ0I19MwwliedaICcdjETyCT0R_e7Wwy_IVT6v
