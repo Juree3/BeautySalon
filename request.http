@@ -104,3 +104,10 @@ Content-Type: image/png
 
 < /Users/jurica/Desktop/test.png
 --WebAppBoundary--
+
+### slika
+POST http://localhost:8080/api/images/upload
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxODY4MDIsImV4cCI6MTc4NjI3MzIwMn0.3XZziYe21EV6OapkeW5WnvShzs7Mncsh1E-R6ua5RQa3HHP7Y7WZg-CtOzYEWtoq
+Content-Type: multipart/form-data
+
+file: /Users/jurica/Desktop/slika.png
