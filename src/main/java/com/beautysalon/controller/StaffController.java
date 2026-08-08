@@ -18,9 +18,7 @@ public class StaffController {
     }
 
     @GetMapping("/by-category/{category}")
-    public List<StaffResponse> getByCategory(
-            @PathVariable Category category
-    ) {
-        return staffService.getByCategory(category);
+    public List<StaffResponse> getByCategory(@PathVariable String category) {
+        return staffService.getByCategory(Category.valueOf(category.toUpperCase()));
     }
 }

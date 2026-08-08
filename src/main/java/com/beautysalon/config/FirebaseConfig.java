@@ -16,24 +16,27 @@ public class FirebaseConfig {
 
         try {
 
-            FileInputStream serviceAccount =
-                    new FileInputStream(
-                            "src/main/resources/firebase/firebase-key.json"
-                    );
+            if (FirebaseApp.getApps().isEmpty()) {
 
-            FirebaseOptions options =
-                    FirebaseOptions.builder()
-                            .setCredentials(
-                                    GoogleCredentials.fromStream(serviceAccount)
-                            )
-                            .setStorageBucket(
-                                    "beautysalon-aa4cf.firebasestorage.app"
-                            )
-                            .build();
+                FileInputStream serviceAccount =
+                        new FileInputStream(
+                                "src/main/resources/firebase/firebase-key.json"
+                        );
 
-            FirebaseApp.initializeApp(options);
+                FirebaseOptions options =
+                        FirebaseOptions.builder()
+                                .setCredentials(
+                                        GoogleCredentials.fromStream(serviceAccount)
+                                )
+                                .setStorageBucket(
+                                        "beautysalon-aa4cf.firebasestorage.app"
+                                )
+                                .build();
 
-            System.out.println("Firebase spojen!");
+                FirebaseApp.initializeApp(options);
+
+                System.out.println("Firebase spojen!");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
