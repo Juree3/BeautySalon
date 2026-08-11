@@ -24,7 +24,7 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "staff@staff.com",
+  "email": "test@test.com",
   "password": "lozinka123"
 }
 
@@ -111,3 +111,15 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb
 Content-Type: multipart/form-data
 
 file: /Users/jurica/Desktop/slika.png
+
+### 3. Kreiraj booking (zamijeni TOKEN ispod tokenom iz koraka 1)
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzg2NDUwNDYxLCJleHAiOjE3ODY1MzY4NjF9.6TBYkZZjZB2r2G-JpQvAl2n7oudZTyZIQHehDGv8BJ3Ia7JiDOEeUIO5lP1ti7vT
+
+{
+  "staffId": 4,
+  "date": "2026-08-20",
+  "startTime": "10:00:00",
+  "serviceIds": [14, 15]
+}
