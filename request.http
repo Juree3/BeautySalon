@@ -23,10 +23,10 @@ Content-Type: application/json
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
-{
-  "email": "test@test.com",
-  "password": "lozinka123"
-}
+    {
+      "email": "staff@staff.com",
+      "password": "lozinka123"
+    }
 
 ### test
 GET http://localhost:8080/api/users/me
@@ -35,11 +35,11 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqdXJlQHRlc3QuY29tIiwicm9sZ
 ### kreiraj uslugu
 POST http://localhost:8080/api/services
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODU5MzQ0NTcsImV4cCI6MTc4NjAyMDg1N30.t-Hggjb9zhWjRI1_2Ay2S3rjOzwl_iWSnvq2LbIZhlNIzF5nPqIHKYrL5P6nRpQ-
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDM1NDUsImV4cCI6MTc4NzA4OTk0NX0.pb2C6hkdLVRIRbeL7OlKzUBLW-ApmNjPYZKdiIgyG3BOTwjg32O4wYMJo-t10qfI
 
 {
-  "name": "French",
-  "description": "Izrada gel noktiju",
+  "name": "obrve",
+  "description": "Izrada obrva",
   "durationMinutes": 45,
   "price": 35.00,
   "imageUrl": "https://example.com/nokti.jpg"
@@ -80,9 +80,9 @@ Content-Type: application/json
 ### dodaj slot (kopiraj token iz logina)
 POST http://localhost:8080/api/work-slots
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODYxMTE5NjgsImV4cCI6MTc4NjE5ODM2OH0.WPhPib-0DvqIwvSRqGmkztl5MkZQ0I19MwwliedaICcdjETyCT0R_e7Wwy_IVT6v
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDM1NDUsImV4cCI6MTc4NzA4OTk0NX0.pb2C6hkdLVRIRbeL7OlKzUBLW-ApmNjPYZKdiIgyG3BOTwjg32O4wYMJo-t10qfI
 
-{ "date": "2026-08-20", "startTime": "09:00", "endTime": "14:00" }
+{ "date": "2026-08-21", "startTime": "09:00", "endTime": "14:00" }
 
 ### moji slotovi
 GET http://localhost:8080/api/work-slots/my
@@ -115,11 +115,14 @@ file: /Users/jurica/Desktop/slika.png
 ### 3. Kreiraj booking (zamijeni TOKEN ispod tokenom iz koraka 1)
 POST http://localhost:8080/api/bookings
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzg2NDUwNDYxLCJleHAiOjE3ODY1MzY4NjF9.6TBYkZZjZB2r2G-JpQvAl2n7oudZTyZIQHehDGv8BJ3Ia7JiDOEeUIO5lP1ti7vT
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDM1NDUsImV4cCI6MTc4NzA4OTk0NX0.pb2C6hkdLVRIRbeL7OlKzUBLW-ApmNjPYZKdiIgyG3BOTwjg32O4wYMJo-t10qfI
 
 {
-  "staffId": 4,
+  "staffId": 3,
   "date": "2026-08-20",
   "startTime": "10:00:00",
-  "serviceIds": [14, 15]
+  "serviceIds": [20]
 }
+
+### Dohvati slobodne termine
+GET http://localhost:8080/api/availability?staffId=3&date=2026-08-20&durationMinutes=60

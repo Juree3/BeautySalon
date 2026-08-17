@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/services", "/api/services/staff/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/staff/by-category/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/availability").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter,
