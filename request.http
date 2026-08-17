@@ -38,11 +38,11 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDM1NDUsImV4cCI6MTc4NzA4OTk0NX0.pb2C6hkdLVRIRbeL7OlKzUBLW-ApmNjPYZKdiIgyG3BOTwjg32O4wYMJo-t10qfI
 
 {
-  "name": "obrve",
+  "name": "sminka",
   "description": "Izrada obrva",
   "durationMinutes": 45,
   "price": 35.00,
-  "imageUrl": "https://example.com/nokti.jpg"
+  "imageUrl": "https://example.com/nokti3.jpg"
 }
 
 ### dohvati sve aktivne (customer view)
@@ -115,14 +115,18 @@ file: /Users/jurica/Desktop/slika.png
 ### 3. Kreiraj booking (zamijeni TOKEN ispod tokenom iz koraka 1)
 POST http://localhost:8080/api/bookings
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDM1NDUsImV4cCI6MTc4NzA4OTk0NX0.pb2C6hkdLVRIRbeL7OlKzUBLW-ApmNjPYZKdiIgyG3BOTwjg32O4wYMJo-t10qfI
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDUzMDcsImV4cCI6MTc4NzA5MTcwN30.vPtVTRhQE9FN8a4Ck3A1Pncv_6YW3km1ij29lLlwehOf4GCdBgXBkbWGXp5zFq6l
 
 {
   "staffId": 3,
   "date": "2026-08-20",
   "startTime": "10:00:00",
-  "serviceIds": [20]
+  "serviceIds": [20, 21]
 }
 
 ### Dohvati slobodne termine
 GET http://localhost:8080/api/availability?staffId=3&date=2026-08-20&durationMinutes=60
+
+### Potvrdi booking (kao STAFF)
+PATCH http://localhost:8080/api/bookings/1/confirm
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDUzMDcsImV4cCI6MTc4NzA5MTcwN30.vPtVTRhQE9FN8a4Ck3A1Pncv_6YW3km1ij29lLlwehOf4GCdBgXBkbWGXp5zFq6l

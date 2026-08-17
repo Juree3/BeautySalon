@@ -17,6 +17,7 @@ import com.beautysalon.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -134,6 +135,135 @@ public class BookingService {
                 customer.getFullName(),
                 staff.getId(),
                 staff.getFullName(),
+                booking.getDate(),
+                booking.getStartTime(),
+                booking.getEndTime(),
+                booking.getStatus(),
+                booking.getTotalPrice(),
+                booking.getTotalDurationMinutes(),
+                booking.getCreatedAt(),
+                itemResponses
+        );
+    }
+
+    public List<BookingResponse> getMyBookings(Long customerId) {
+
+        List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
+        List<BookingResponse> responses = new ArrayList<>();
+
+        for (int i = 0; i < bookings.size(); i++) {
+            Booking booking = bookings.get(i);
+
+            List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+            List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+            for (int k = 0; k < items.size(); k++) {
+                BookingItem item = items.get(k);
+                itemResponses.add(new BookingItemResponse(
+                        item.getService() != null ? item.getService().getId() : null,
+                        item.getServiceName(),
+                        item.getPrice(),
+                        item.getDurationMinutes()
+                ));
+            }
+
+            responses.add(new BookingResponse(
+                    booking.getId(),
+                    booking.getCustomer().getId(),
+                    booking.getCustomer().getFullName(),
+                    booking.getStaff().getId(),
+                    booking.getStaff().getFullName(),
+                    booking.getDate(),
+                    booking.getStartTime(),
+                    booking.getEndTime(),
+                    booking.getStatus(),
+                    booking.getTotalPrice(),
+                    booking.getTotalDurationMinutes(),
+                    booking.getCreatedAt(),
+                    itemResponses
+            ));
+        }
+
+        return responses;
+    }
+
+    public List<BookingResponse> getStaffBookings(Long staffId, LocalDate date) {
+
+        List<Booking> bookings = bookingRepository.findByStaffIdAndDate(staffId, date);
+        List<BookingResponse> responses = new ArrayList<>();
+
+        for (int i = 0; i < bookings.size(); i++) {
+            Booking booking = bookings.get(i);
+
+            List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+            List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+            for (int k = 0; k < items.size(); k++) {
+                BookingItem item = items.get(k);
+                itemResponses.add(new BookingItemResponse(
+                        item.getService() != null ? item.getService().getId() : null,
+                        item.getServiceName(),
+                        item.getPrice(),
+                        item.getDurationMinutes()
+                ));
+            }
+
+            responses.add(new BookingResponse(
+                    booking.getId(),
+                    booking.getCustomer().getId(),
+                    booking.getCustomer().getFullName(),
+                    booking.getStaff().getId(),
+                    booking.getStaff().getFullName(),
+                    booking.getDate(),
+                    booking.getStartTime(),
+                    booking.getEndTime(),
+                    booking.getStatus(),
+                    booking.getTotalPrice(),
+                    booking.getTotalDurationMinutes(),
+                    booking.getCreatedAt(),
+                    itemResponses
+            ));
+        }
+
+        return responses;
+    }
+
+    @Transactional
+    public BookingResponse confirmBooking(Long bookingId, Long staffId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rezervacija nije pronađena"));
+
+        if (!booking.getStaff().getId().equals(staffId)) {
+            throw new BadRequestException("Nemate pravo mijenjati ovu rezervaciju");
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new BadRequestException("Samo rezervacije na čekanju mogu biti potvrđene");
+        }
+
+        booking.setStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
+
+        List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+        List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+        for (int k = 0; k < items.size(); k++) {
+            BookingItem item = items.get(k);
+            itemResponses.add(new BookingItemResponse(
+                    item.getService() != null ? item.getService().getId() : null,
+                    item.getServiceName(),
+                    item.getPrice(),
+                    item.getDurationMinutes()
+            ));
+        }
+
+        return new BookingResponse(
+                booking.getId(),
+                booking.getCustomer().getId(),
+                booking.getCustomer().getFullName(),
+                booking.getStaff().getId(),
+                booking.getStaff().getFullName(),
                 booking.getDate(),
                 booking.getStartTime(),
                 booking.getEndTime(),
