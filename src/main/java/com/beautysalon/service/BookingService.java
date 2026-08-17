@@ -274,4 +274,69 @@ public class BookingService {
                 itemResponses
         );
     }
+
+    @Transactional
+    public BookingResponse cancelBooking(Long bookingId, Long userId, Role userRole) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rezervacija nije pronađena"));
+
+        if (userRole == Role.CUSTOMER) {
+            if (!booking.getCustomer().getId().equals(userId)) {
+                throw new BadRequestException("Nemate pravo otkazati ovu rezervaciju");
+            }
+        } else {
+            if (!booking.getStaff().getId().equals(userId)) {
+                throw new BadRequestException("Nemate pravo otkazati ovu rezervaciju");
+            }
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.CONFIRMED) {
+            throw new BadRequestException("Ova rezervacija se ne može otkazati");
+        }
+
+        LocalDateTime bookingDateTime = LocalDateTime.of(booking.getDate(), booking.getStartTime());
+        LocalDateTime deadline = bookingDateTime.minusHours(24);
+
+        if (LocalDateTime.now().isAfter(deadline)) {
+            throw new BadRequestException("Otkazivanje je moguće najkasnije 24h prije termina");
+        }
+
+        if (userRole == Role.CUSTOMER) {
+            booking.setStatus(BookingStatus.CANCELLED_BY_CUSTOMER);
+        } else {
+            booking.setStatus(BookingStatus.CANCELLED_BY_STAFF);
+        }
+
+        bookingRepository.save(booking);
+
+        List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+        List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+        for (int k = 0; k < items.size(); k++) {
+            BookingItem item = items.get(k);
+            itemResponses.add(new BookingItemResponse(
+                    item.getService() != null ? item.getService().getId() : null,
+                    item.getServiceName(),
+                    item.getPrice(),
+                    item.getDurationMinutes()
+            ));
+        }
+
+        return new BookingResponse(
+                booking.getId(),
+                booking.getCustomer().getId(),
+                booking.getCustomer().getFullName(),
+                booking.getStaff().getId(),
+                booking.getStaff().getFullName(),
+                booking.getDate(),
+                booking.getStartTime(),
+                booking.getEndTime(),
+                booking.getStatus(),
+                booking.getTotalPrice(),
+                booking.getTotalDurationMinutes(),
+                booking.getCreatedAt(),
+                itemResponses
+        );
+    }
 }

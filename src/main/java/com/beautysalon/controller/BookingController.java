@@ -82,4 +82,19 @@ public class BookingController {
 
         return ResponseEntity.ok(response);
     }
+    
+    @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'STAFF')")
+    public ResponseEntity<BookingResponse> cancelBooking(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Korisnik nije pronađen"));
+
+        BookingResponse response = bookingService.cancelBooking(id, user.getId(), user.getRole());
+
+        return ResponseEntity.ok(response);
+    }
 }
