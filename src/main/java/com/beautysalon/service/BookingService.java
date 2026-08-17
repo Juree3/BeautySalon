@@ -339,4 +339,57 @@ public class BookingService {
                 itemResponses
         );
     }
+
+    @Transactional
+    public BookingResponse markNoShow(Long bookingId, Long staffId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rezervacija nije pronađena"));
+
+        if (!booking.getStaff().getId().equals(staffId)) {
+            throw new BadRequestException("Nemate pravo mijenjati ovu rezervaciju");
+        }
+
+        if (booking.getStatus() != BookingStatus.CONFIRMED) {
+            throw new BadRequestException("Samo potvrđene rezervacije mogu biti označene kao no-show");
+        }
+
+        LocalDateTime bookingEnd = LocalDateTime.of(booking.getDate(), booking.getEndTime());
+
+        if (LocalDateTime.now().isBefore(bookingEnd)) {
+            throw new BadRequestException("Termin još nije prošao");
+        }
+
+        booking.setStatus(BookingStatus.NO_SHOW);
+        bookingRepository.save(booking);
+
+        List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+        List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+        for (int k = 0; k < items.size(); k++) {
+            BookingItem item = items.get(k);
+            itemResponses.add(new BookingItemResponse(
+                    item.getService() != null ? item.getService().getId() : null,
+                    item.getServiceName(),
+                    item.getPrice(),
+                    item.getDurationMinutes()
+            ));
+        }
+
+        return new BookingResponse(
+                booking.getId(),
+                booking.getCustomer().getId(),
+                booking.getCustomer().getFullName(),
+                booking.getStaff().getId(),
+                booking.getStaff().getFullName(),
+                booking.getDate(),
+                booking.getStartTime(),
+                booking.getEndTime(),
+                booking.getStatus(),
+                booking.getTotalPrice(),
+                booking.getTotalDurationMinutes(),
+                booking.getCreatedAt(),
+                itemResponses
+        );
+    }
 }
