@@ -392,4 +392,45 @@ public class BookingService {
                 itemResponses
         );
     }
+
+    public List<BookingResponse> getAllStaffBookings(Long staffId) {
+
+        List<Booking> bookings = bookingRepository.findByStaffId(staffId);
+        List<BookingResponse> responses = new ArrayList<>();
+
+        for (int i = 0; i < bookings.size(); i++) {
+            Booking booking = bookings.get(i);
+
+            List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
+            List<BookingItemResponse> itemResponses = new ArrayList<>();
+
+            for (int k = 0; k < items.size(); k++) {
+                BookingItem item = items.get(k);
+                itemResponses.add(new BookingItemResponse(
+                        item.getService() != null ? item.getService().getId() : null,
+                        item.getServiceName(),
+                        item.getPrice(),
+                        item.getDurationMinutes()
+                ));
+            }
+
+            responses.add(new BookingResponse(
+                    booking.getId(),
+                    booking.getCustomer().getId(),
+                    booking.getCustomer().getFullName(),
+                    booking.getStaff().getId(),
+                    booking.getStaff().getFullName(),
+                    booking.getDate(),
+                    booking.getStartTime(),
+                    booking.getEndTime(),
+                    booking.getStatus(),
+                    booking.getTotalPrice(),
+                    booking.getTotalDurationMinutes(),
+                    booking.getCreatedAt(),
+                    itemResponses
+            ));
+        }
+
+        return responses;
+    }
 }

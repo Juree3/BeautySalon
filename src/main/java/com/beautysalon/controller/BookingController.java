@@ -112,4 +112,17 @@ public class BookingController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/staff/all")
+    @PreAuthorize("hasRole('STAFF')")
+    public ResponseEntity<List<BookingResponse>> getAllStaffBookings(Authentication authentication) {
+
+        String email = authentication.getName();
+        User staff = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Korisnik nije pronađen"));
+
+        List<BookingResponse> responses = bookingService.getAllStaffBookings(staff.getId());
+
+        return ResponseEntity.ok(responses);
+    }
 }
