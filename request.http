@@ -24,7 +24,7 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
     {
-      "email": "staff@staff.com",
+      "email": "test@test.com",
       "password": "lozinka123"
     }
 
@@ -115,12 +115,12 @@ file: /Users/jurica/Desktop/slika.png
 ### 3. Kreiraj booking (zamijeni TOKEN ispod tokenom iz koraka 1)
 POST http://localhost:8080/api/bookings
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDUzMDcsImV4cCI6MTc4NzA5MTcwN30.vPtVTRhQE9FN8a4Ck3A1Pncv_6YW3km1ij29lLlwehOf4GCdBgXBkbWGXp5zFq6l
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzg3MTM4MDgzLCJleHAiOjE3ODcyMjQ0ODN9.85P-AIM4EIc0dI0-CSOp6DeANEobtIS_somsIXFUDXleMnfJR8bMgga-A8B7E5WN
 
 {
   "staffId": 3,
-  "date": "2026-08-20",
-  "startTime": "10:00:00",
+  "date": "2026-08-19",
+  "startTime": "13:16:00",
   "serviceIds": [20, 21]
 }
 
@@ -128,5 +128,5 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb
 GET http://localhost:8080/api/availability?staffId=3&date=2026-08-20&durationMinutes=60
 
 ### Potvrdi booking (kao STAFF)
-PATCH http://localhost:8080/api/bookings/1/confirm
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcwMDUzMDcsImV4cCI6MTc4NzA5MTcwN30.vPtVTRhQE9FN8a4Ck3A1Pncv_6YW3km1ij29lLlwehOf4GCdBgXBkbWGXp5zFq6l
+PATCH http://localhost:8080/api/bookings/8/confirm
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcxMzc5NzgsImV4cCI6MTc4NzIyNDM3OH0.cT6MKn3ISZitqdTUrAdfl0blmH8JSbZvo9lkiACUJxgM-6uuTtuIXpRnFlVCYmuN

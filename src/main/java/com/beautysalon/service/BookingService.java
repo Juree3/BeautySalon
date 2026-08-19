@@ -15,6 +15,7 @@ import com.beautysalon.repository.BookingRepository;
 import com.beautysalon.repository.ServiceRepository;
 import com.beautysalon.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -432,5 +433,23 @@ public class BookingService {
         }
 
         return responses;
+    }
+
+    @Scheduled(fixedRate = 60000) // svakih 10 minuta
+    @Transactional
+    public void completeExpiredBookings() {
+
+        List<Booking> confirmedBookings = bookingRepository.findByStatus(BookingStatus.CONFIRMED);
+
+        for (int i = 0; i < confirmedBookings.size(); i++) {
+            Booking booking = confirmedBookings.get(i);
+
+            LocalDateTime bookingEnd = LocalDateTime.of(booking.getDate(), booking.getEndTime());
+
+            if (LocalDateTime.now().isAfter(bookingEnd)) {
+                booking.setStatus(BookingStatus.COMPLETED);
+                bookingRepository.save(booking);
+            }
+        }
     }
 }
