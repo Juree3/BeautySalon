@@ -59,7 +59,9 @@ public class AvailabilityService {
                     }
                 }
 
-                if (isAvailable) {
+                boolean isInPast = date.equals(LocalDate.now()) && candidate.isBefore(LocalTime.now());
+
+                if (isAvailable && !isInPast) {
                     availableSlots.add(candidate);
                 }
 
