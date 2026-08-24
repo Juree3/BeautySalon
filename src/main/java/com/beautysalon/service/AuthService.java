@@ -106,4 +106,13 @@ public class AuthService {
         user.setPhone(phone);
         userRepository.save(user);
     }
+    public void verifyEmail(String token) {
+
+        User user = userRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new BadRequestException("Nevažeći ili istekao verifikacijski link"));
+
+        user.setEmailVerified(true);
+        user.setVerificationToken(null);
+        userRepository.save(user);
+    }
 }

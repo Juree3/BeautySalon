@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "fullName": "Gaba Stjepanovic",
-  "email": "gaba@test.com",
+  "fullName": "Jurica Stjepanovic",
+  "email": "stjepanovic.jurica7@gmail.com",
   "password": "lozinka123",
   "phone": "063682394"
 }

@@ -46,4 +46,9 @@ public class AuthController {
 
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/verify-email")
+    public ResponseEntity<Void> verifyEmail(@RequestBody VerifyEmailRequest request) {
+        authService.verifyEmail(request.getToken());
+        return ResponseEntity.ok().build();
+    }
 }
