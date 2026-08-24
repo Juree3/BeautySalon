@@ -33,4 +33,4 @@ build/
 .vscode/
 
 firebase-key.json
-src/main/resources/firebase/
+src/main/resources/firebase/src/main/resources/firebase/firebase-key.json
