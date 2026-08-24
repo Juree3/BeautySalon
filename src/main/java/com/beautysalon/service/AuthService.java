@@ -13,6 +13,7 @@ import com.beautysalon.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.beautysalon.jwt.JwtService;
+import java.time.LocalDateTime;
 
 import java.util.UUID;
 
@@ -113,6 +114,37 @@ public class AuthService {
 
         user.setEmailVerified(true);
         user.setVerificationToken(null);
+        userRepository.save(user);
+    }
+    public void forgotPassword(String email) {
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            return;
+        }
+
+        String token = UUID.randomUUID().toString();
+
+        user.setResetToken(token);
+        user.setResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        emailService.sendPasswordResetEmail(user.getEmail(), token);
+    }
+
+    public void resetPassword(String token, String newPassword) {
+
+        User user = userRepository.findByResetToken(token)
+                .orElseThrow(() -> new BadRequestException("Nevažeći link za promjenu lozinke"));
+
+        if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Link je istekao, zatražite novi");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
         userRepository.save(user);
     }
 }

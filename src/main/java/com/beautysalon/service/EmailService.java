@@ -26,4 +26,17 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    public void sendPasswordResetEmail(String toEmail, String token) {
+
+        String resetLink = "http://localhost:5173/reset-password?token=" + token;
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Zahtjev za promjenu lozinke - Beauty Salon");
+        message.setText("Pozdrav,\n\nZatražili ste promjenu lozinke. Kliknite na sljedeći link da postavite novu lozinku:\n"
+                + resetLink
+                + "\n\nLink vrijedi 1 sat. Ako niste vi zatražili ovo, slobodno zanemarite ovaj email.");
+
+        mailSender.send(message);
+    }
 }
