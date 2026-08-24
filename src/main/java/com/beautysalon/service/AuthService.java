@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.beautysalon.jwt.JwtService;
 
+import java.util.UUID;
+
 @Service
 public class AuthService {
 
@@ -21,13 +23,16 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final GoogleAuthService googleAuthService;
+    private final EmailService emailService;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       JwtService jwtService, GoogleAuthService googleAuthService) {
+                       JwtService jwtService, GoogleAuthService googleAuthService,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.googleAuthService = googleAuthService;
+        this.emailService = emailService;
     }
 
     public void register(RegisterRequest request) {
@@ -36,14 +41,20 @@ public class AuthService {
             throw new EmailAlreadyExistsException("Email se već koristi");
         }
 
+        String token = UUID.randomUUID().toString();
+
         User user = new User();
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.CUSTOMER);
+        user.setEmailVerified(false);
+        user.setVerificationToken(token);
 
         userRepository.save(user);
+
+        emailService.sendVerificationEmail(user.getEmail(), token);
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -76,6 +87,7 @@ public class AuthService {
             user.setEmail(googleUser.getEmail());
             user.setPasswordHash(null);
             user.setRole(Role.CUSTOMER);
+            user.setEmailVerified(true);
             userRepository.save(user);
         }
 

@@ -48,4 +48,9 @@ public class User {
     @Column(name = "category")
     private Category category;
 
+    @Column(name = "email_verified", nullable = false)
+    private Boolean emailVerified = false;
+
+    @Column(name = "verification_token")
+    private String verificationToken;
 }
