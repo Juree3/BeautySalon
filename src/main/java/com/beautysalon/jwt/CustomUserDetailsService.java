@@ -21,11 +21,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Korisnik nije pronađen"));
 
-
+        String password = user.getPasswordHash() != null ? user.getPasswordHash() : "N/A";
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
-                .password(user.getPasswordHash())
+                .password(password)
                 .roles(user.getRole().name())
                 .build();
     }

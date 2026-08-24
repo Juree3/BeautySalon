@@ -67,6 +67,10 @@ public class AuthService {
             throw new InvalidCredentialsException("Pogrešan email ili lozinka");
         }
 
+        if (!user.getEmailVerified()) {
+            throw new BadRequestException("Molimo prvo potvrdite svoju email adresu prije prijave");
+        }
+
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
 
         return new LoginResponse(token, user.getFullName(), user.getRole(), user.getPhone(), false);
