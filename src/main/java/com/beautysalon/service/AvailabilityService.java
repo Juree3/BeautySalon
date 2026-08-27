@@ -1,6 +1,5 @@
 package com.beautysalon.service;
 
-import com.beautysalon.dto.AvailabilityResponse;
 import com.beautysalon.entity.Booking;
 import com.beautysalon.entity.WorkSlot;
 import com.beautysalon.enums.BookingStatus;
@@ -25,12 +24,12 @@ public class AvailabilityService {
         this.workSlotRepository = workSlotRepository;
     }
 
-    public AvailabilityResponse getAvailableSlots(Long staffId, LocalDate date, Integer durationMinutes) {
+    public List<LocalTime> getAvailableSlots(Long staffId, LocalDate date, Integer durationMinutes) {
 
         List<WorkSlot> workSlots = workSlotRepository.findByStaffIdAndDate(staffId, date);
 
         if (workSlots.isEmpty()) {
-            return new AvailabilityResponse(false, new ArrayList<>());
+            return new ArrayList<>(); // staff taj dan nikako ne radi
         }
 
         List<Booking> existingBookings = bookingRepository.findByStaffIdAndDateAndStatusIn(
@@ -70,6 +69,6 @@ public class AvailabilityService {
             }
         }
 
-        return new AvailabilityResponse(true, availableSlots);
+        return availableSlots;
     }
 }
