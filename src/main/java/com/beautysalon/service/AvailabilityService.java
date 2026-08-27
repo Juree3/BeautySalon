@@ -29,7 +29,10 @@ public class AvailabilityService {
         List<WorkSlot> workSlots = workSlotRepository.findByStaffIdAndDate(staffId, date);
 
         if (workSlots.isEmpty()) {
-            return new ArrayList<>(); // staff taj dan nikako ne radi
+            WorkSlot defaultSlot = new WorkSlot();
+            defaultSlot.setStartTime(LocalTime.of(7, 0));
+            defaultSlot.setEndTime(LocalTime.of(20, 0));
+            workSlots = List.of(defaultSlot);
         }
 
         List<Booking> existingBookings = bookingRepository.findByStaffIdAndDateAndStatusIn(
