@@ -26,6 +26,7 @@ public class EmailService {
 
         mailSender.send(message);
     }
+
     public void sendPasswordResetEmail(String toEmail, String token) {
 
         String resetLink = "http://localhost:5173/reset-password?token=" + token;
@@ -36,6 +37,26 @@ public class EmailService {
         message.setText("Pozdrav,\n\nZatražili ste promjenu lozinke. Kliknite na sljedeći link da postavite novu lozinku:\n"
                 + resetLink
                 + "\n\nLink vrijedi 1 sat. Ako niste vi zatražili ovo, slobodno zanemarite ovaj email.");
+
+        mailSender.send(message);
+    }
+
+    public void sendBookingConfirmedEmail(String toEmail, String bookingDate) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Rezervacija potvrđena - Beauty Salon");
+        message.setText("Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je potvrđena. Veselimo se vašem dolasku!\n\nBeauty Salon tim");
+
+        mailSender.send(message);
+    }
+
+    public void sendBookingCancelledEmail(String toEmail, String bookingDate) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Rezervacija otkazana - Beauty Salon");
+        message.setText("Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je nažalost otkazana. Slobodno rezervirajte novi termin kad vam odgovara.\n\nBeauty Salon tim");
 
         mailSender.send(message);
     }

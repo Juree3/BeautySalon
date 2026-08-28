@@ -31,15 +31,19 @@ public class BookingService {
     private final BookingItemRepository bookingItemRepository;
     private final UserRepository userRepository;
     private final ServiceRepository serviceRepository;
+    private final NotificationService notificationService;
+    private final EmailService emailService;
 
     public BookingService(BookingRepository bookingRepository,
                           BookingItemRepository bookingItemRepository,
                           UserRepository userRepository,
-                          ServiceRepository serviceRepository) {
+                          ServiceRepository serviceRepository, NotificationService notificationService,  EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.bookingItemRepository = bookingItemRepository;
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
+        this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -106,6 +110,8 @@ public class BookingService {
         booking.setCreatedAt(LocalDateTime.now());
 
         bookingRepository.save(booking);
+        notificationService.createNotification(staff.getId(), "Nova rezervacija na čekanju od " + customer.getFullName());
+
 
         // kreiranje i spremanje booking_items (snapshot)
         List<BookingItemResponse> itemResponses = new ArrayList<>();
@@ -246,6 +252,11 @@ public class BookingService {
         booking.setStatus(BookingStatus.CONFIRMED);
         bookingRepository.save(booking);
 
+        notificationService.createNotification(booking.getCustomer().getId(),
+                "Vaša rezervacija za " + booking.getDate() + " je potvrđena");
+        emailService.sendBookingConfirmedEmail(booking.getCustomer().getEmail(), booking.getDate().toString());
+
+
         List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
         List<BookingItemResponse> itemResponses = new ArrayList<>();
 
@@ -310,6 +321,15 @@ public class BookingService {
         }
 
         bookingRepository.save(booking);
+
+        if (userRole == Role.CUSTOMER) {
+            notificationService.createNotification(booking.getStaff().getId(),
+                    "Klijent je otkazao rezervaciju za " + booking.getDate());
+        } else {
+            notificationService.createNotification(booking.getCustomer().getId(),
+                    "Vaša rezervacija za " + booking.getDate() + " je otkazana");
+            emailService.sendBookingCancelledEmail(booking.getCustomer().getEmail(), booking.getDate().toString());
+        }
 
         List<BookingItem> items = bookingItemRepository.findByBookingId(booking.getId());
         List<BookingItemResponse> itemResponses = new ArrayList<>();

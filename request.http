@@ -130,3 +130,11 @@ GET http://localhost:8080/api/availability?staffId=3&date=2026-08-20&durationMin
 ### Potvrdi booking (kao STAFF)
 PATCH http://localhost:8080/api/bookings/8/confirm
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZkBzdGFmZi5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3ODcxMzc5NzgsImV4cCI6MTc4NzIyNDM3OH0.cT6MKn3ISZitqdTUrAdfl0blmH8JSbZvo9lkiACUJxgM-6uuTtuIXpRnFlVCYmuN
+
+### Zatraži reset lozinke
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "stjepanovic.jurica7@gmail.com"
+}
