@@ -153,6 +153,9 @@ public class WorkSlotService {
         if (request.getEndDate().isBefore(request.getStartDate())) {
             throw new RuntimeException("Krajnji datum mora biti nakon početnog");
         }
+        if (request.getStartDate().plusYears(1).isBefore(request.getEndDate())) {
+            throw new RuntimeException("Raspon ne smije biti dulji od godinu dana");
+        }
 
         String email = SecurityContextHolder
                 .getContext()
