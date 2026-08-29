@@ -1,9 +1,6 @@
 package com.beautysalon.controller;
 
-import com.beautysalon.dto.ServiceRequest;
-import com.beautysalon.dto.ServiceResponse;
-import com.beautysalon.dto.WorkSlotRequest;
-import com.beautysalon.dto.WorkSlotResponse;
+import com.beautysalon.dto.*;
 import com.beautysalon.service.WorkSlotService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +42,13 @@ public class WorkSlotController {
         workSlotService.deleteWorkSlot(id);
     }
 
+
+    @PostMapping("/recurring")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('STAFF')")
+    public List<WorkSlotResponse> createRecurring(
+            @Valid @RequestBody RecurringWorkSlotRequest request
+    ) {
+        return workSlotService.createRecurringWorkSlots(request);
+    }
 }

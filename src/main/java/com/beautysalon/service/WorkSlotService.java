@@ -1,5 +1,6 @@
 package com.beautysalon.service;
 
+import com.beautysalon.dto.RecurringWorkSlotRequest;
 import com.beautysalon.dto.ServiceResponse;
 import com.beautysalon.dto.WorkSlotRequest;
 import com.beautysalon.dto.WorkSlotResponse;
@@ -141,5 +142,63 @@ public class WorkSlotService {
             throw new RuntimeException("Nije tvoj slot");
         }
         workSlotRepository.delete(workSlot);
+    }
+
+    public List<WorkSlotResponse> createRecurringWorkSlots(RecurringWorkSlotRequest request) {
+
+        if (request.getEndTime().isBefore(request.getStartTime())) {
+            throw new RuntimeException("Vrijeme završetka mora biti nakon početka");
+        }
+
+        if (request.getEndDate().isBefore(request.getStartDate())) {
+            throw new RuntimeException("Krajnji datum mora biti nakon početnog");
+        }
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
+
+        List<WorkSlot> createdSlots = new java.util.ArrayList<>();
+
+        LocalDate currentDate = request.getStartDate();
+
+        while (!currentDate.isAfter(request.getEndDate())) {
+
+            boolean dayMatches = request.getDaysOfWeek() == null
+                    || request.getDaysOfWeek().isEmpty()
+                    || request.getDaysOfWeek().contains(currentDate.getDayOfWeek());
+
+            if (dayMatches) {
+
+                List<WorkSlot> existing = workSlotRepository.findByStaffIdAndDate(currentUser.getId(), currentDate);
+
+                if (existing.isEmpty()) {
+
+                    WorkSlot workSlot = new WorkSlot();
+                    workSlot.setStaff(currentUser);
+                    workSlot.setDate(currentDate);
+                    workSlot.setStartTime(request.getStartTime());
+                    workSlot.setEndTime(request.getEndTime());
+
+                    createdSlots.add(workSlotRepository.save(workSlot));
+                }
+            }
+
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return createdSlots.stream()
+                .map(slot -> new WorkSlotResponse(
+                        slot.getId(),
+                        slot.getStaff().getId(),
+                        slot.getDate(),
+                        slot.getStartTime(),
+                        slot.getEndTime()
+                ))
+                .toList();
     }
 }
