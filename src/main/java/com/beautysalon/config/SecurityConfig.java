@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/services", "/api/services/staff/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/staff/by-category/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/availability").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter,
