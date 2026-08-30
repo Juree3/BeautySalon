@@ -49,4 +49,13 @@ public class NotificationController {
         notificationService.markAsRead(id);
         return ResponseEntity.ok().build();
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable Long id, Authentication authentication) {
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Korisnik nije pronađen"));
+
+        notificationService.deleteNotification(id, user.getId());
+        return ResponseEntity.ok().build();
+    }
 }

@@ -3,6 +3,7 @@ package com.beautysalon.service;
 import com.beautysalon.dto.NotificationResponse;
 import com.beautysalon.entity.Notification;
 import com.beautysalon.entity.User;
+import com.beautysalon.exception.BadRequestException;
 import com.beautysalon.exception.ResourceNotFoundException;
 import com.beautysalon.repository.NotificationRepository;
 import com.beautysalon.repository.UserRepository;
@@ -64,5 +65,16 @@ public class NotificationService {
 
         notification.setRead(true);
         notificationRepository.save(notification);
+    }
+    public void deleteNotification(Long notificationId, Long userId) {
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Notifikacija nije pronađena"));
+
+        if (!notification.getUser().getId().equals(userId)) {
+            throw new BadRequestException("Nemate pravo obrisati ovu notifikaciju");
+        }
+
+        notificationRepository.delete(notification);
     }
 }
