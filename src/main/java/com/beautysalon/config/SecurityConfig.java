@@ -52,7 +52,11 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-        config.setAllowedOrigins(java.util.List.of("*"));
+        config.setAllowedOrigins(java.util.List.of(
+                "https://beautyroomsaloon.com",
+                "https://www.beautyroomsaloon.com",
+                "http://localhost:5173"
+        ));
         config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(java.util.List.of("*"));
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
