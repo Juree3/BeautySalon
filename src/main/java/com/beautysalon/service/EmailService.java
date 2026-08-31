@@ -18,6 +18,9 @@ public class EmailService {
     @Value("${RESEND_FROM_EMAIL:onboarding@resend.dev}")
     private String fromEmail;
 
+    @Value("${FRONTEND_URL:http://localhost:5173}")
+    private String frontendUrl;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     private void sendEmail(String toEmail, String subject, String text) {
@@ -45,7 +48,7 @@ public class EmailService {
 
     public void sendVerificationEmail(String toEmail, String token) {
 
-        String verificationLink = "http://localhost:5173/verify-email?token=" + token;
+        String verificationLink = frontendUrl + "/verify-email?token=" + token;
 
         sendEmail(toEmail, "Potvrdite svoju email adresu - Beauty Salon",
                 "Pozdrav,\n\nMolimo potvrdite svoju email adresu klikom na sljedeći link:\n"
@@ -55,7 +58,7 @@ public class EmailService {
 
     public void sendPasswordResetEmail(String toEmail, String token) {
 
-        String resetLink = "http://localhost:5173/reset-password?token=" + token;
+        String resetLink = frontendUrl + "/reset-password?token=" + token;
 
         sendEmail(toEmail, "Zahtjev za promjenu lozinke - Beauty Salon",
                 "Pozdrav,\n\nZatražili ste promjenu lozinke. Kliknite na sljedeći link da postavite novu lozinku:\n"
