@@ -1,63 +1,72 @@
 package com.beautysalon.service;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${RESEND_API_KEY}")
+    private String resendApiKey;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    @Value("${RESEND_FROM_EMAIL:onboarding@resend.dev}")
+    private String fromEmail;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private void sendEmail(String toEmail, String subject, String text) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(resendApiKey);
+
+        Map<String, Object> body = Map.of(
+                "from", fromEmail,
+                "to", new String[]{toEmail},
+                "subject", subject,
+                "text", text
+        );
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+
+        restTemplate.postForEntity("https://api.resend.com/emails", request, String.class);
     }
 
     public void sendVerificationEmail(String toEmail, String token) {
 
         String verificationLink = "http://localhost:5173/verify-email?token=" + token;
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Potvrdite svoju email adresu - Beauty Salon");
-        message.setText("Pozdrav,\n\nMolimo potvrdite svoju email adresu klikom na sljedeći link:\n"
-                + verificationLink
-                + "\n\nAko niste vi zatražili registraciju, slobodno zanemarite ovaj email.");
-
-        mailSender.send(message);
+        sendEmail(toEmail, "Potvrdite svoju email adresu - Beauty Salon",
+                "Pozdrav,\n\nMolimo potvrdite svoju email adresu klikom na sljedeći link:\n"
+                        + verificationLink
+                        + "\n\nAko niste vi zatražili registraciju, slobodno zanemarite ovaj email.");
     }
 
     public void sendPasswordResetEmail(String toEmail, String token) {
 
         String resetLink = "http://localhost:5173/reset-password?token=" + token;
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Zahtjev za promjenu lozinke - Beauty Salon");
-        message.setText("Pozdrav,\n\nZatražili ste promjenu lozinke. Kliknite na sljedeći link da postavite novu lozinku:\n"
-                + resetLink
-                + "\n\nLink vrijedi 1 sat. Ako niste vi zatražili ovo, slobodno zanemarite ovaj email.");
-
-        mailSender.send(message);
+        sendEmail(toEmail, "Zahtjev za promjenu lozinke - Beauty Salon",
+                "Pozdrav,\n\nZatražili ste promjenu lozinke. Kliknite na sljedeći link da postavite novu lozinku:\n"
+                        + resetLink
+                        + "\n\nLink vrijedi 1 sat. Ako niste vi zatražili ovo, slobodno zanemarite ovaj email.");
     }
 
     public void sendBookingConfirmedEmail(String toEmail, String bookingDate) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Rezervacija potvrđena - Beauty Salon");
-        message.setText("Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je potvrđena. Veselimo se vašem dolasku!\n\nBeauty Salon tim");
-
-        mailSender.send(message);
+        sendEmail(toEmail, "Rezervacija potvrđena - Beauty Salon",
+                "Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je potvrđena. Veselimo se vašem dolasku!\n\nBeauty Salon tim");
     }
 
     public void sendBookingCancelledEmail(String toEmail, String bookingDate) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Rezervacija otkazana - Beauty Salon");
-        message.setText("Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je nažalost otkazana. Slobodno rezervirajte novi termin kad vam odgovara.\n\nBeauty Salon tim");
-
-        mailSender.send(message);
+        sendEmail(toEmail, "Rezervacija otkazana - Beauty Salon",
+                "Pozdrav,\n\nVaša rezervacija za " + bookingDate + " je nažalost otkazana. Slobodno rezervirajte novi termin kad vam odgovara.\n\nBeauty Salon tim");
     }
 }
