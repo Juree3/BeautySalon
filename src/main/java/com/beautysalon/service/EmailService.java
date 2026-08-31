@@ -22,20 +22,25 @@ public class EmailService {
 
     private void sendEmail(String toEmail, String subject, String text) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(resendApiKey);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(resendApiKey);
 
-        Map<String, Object> body = Map.of(
-                "from", fromEmail,
-                "to", new String[]{toEmail},
-                "subject", subject,
-                "text", text
-        );
+            Map<String, Object> body = Map.of(
+                    "from", fromEmail,
+                    "to", new String[]{toEmail},
+                    "subject", subject,
+                    "text", text
+            );
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
-        restTemplate.postForEntity("https://api.resend.com/emails", request, String.class);
+            restTemplate.postForEntity("https://api.resend.com/emails", request, String.class);
+
+        } catch (Exception e) {
+            System.out.println("RESEND GRESKA: " + e.getMessage());
+        }
     }
 
     public void sendVerificationEmail(String toEmail, String token) {
