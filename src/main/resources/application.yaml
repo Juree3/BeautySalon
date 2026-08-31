@@ -19,6 +19,11 @@ spring:
           starttls:
             enable: true
 
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
 logging:
   level:
     org.springframework.security: DEBUG
@@ -27,8 +32,8 @@ jwt:
   secret: ${JWT_SECRET}
   expiration: 86400000
 
-  spring:
-    servlet:
-      multipart:
-        max-file-size: 100MB
-        max-request-size: 100MB
+
+
+
+
+
