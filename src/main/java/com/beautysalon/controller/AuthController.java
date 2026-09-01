@@ -102,4 +102,15 @@ public class AuthController {
 
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/resend-verification")
+    public ResponseEntity<Void> resendVerification(@RequestBody ForgotPasswordRequest request, HttpServletRequest httpRequest) {
+
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.isAllowedPerHour("resend-verification:" + ip, 4)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+        }
+
+        authService.resendVerificationEmail(request.getEmail());
+        return ResponseEntity.ok().build();
+    }
 }

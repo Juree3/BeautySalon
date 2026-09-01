@@ -9,6 +9,7 @@ import com.beautysalon.enums.Role;
 import com.beautysalon.exception.EmailAlreadyExistsException;
 import com.beautysalon.exception.InvalidCredentialsException;
 import com.beautysalon.exception.BadRequestException;
+import com.beautysalon.exception.ResourceNotFoundException;
 import com.beautysalon.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -150,5 +151,22 @@ public class AuthService {
         user.setResetToken(null);
         user.setResetTokenExpiry(null);
         userRepository.save(user);
+    }
+
+
+    public void resendVerificationEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Korisnik nije pronađen"));
+
+        if (user.getEmailVerified()) {
+            throw new BadRequestException("Email je već verificiran");
+        }
+
+        String newToken = UUID.randomUUID().toString();
+        user.setVerificationToken(newToken);
+        userRepository.save(user);
+
+        emailService.sendVerificationEmail(user.getEmail(), newToken);
     }
 }
