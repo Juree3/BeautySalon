@@ -11,7 +11,8 @@ CREATE TABLE bookings (
                           created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
 
                           CONSTRAINT fk_bookings_customer FOREIGN KEY (customer_id) REFERENCES users(id),
-                          CONSTRAINT fk_bookings_staff FOREIGN KEY (staff_id) REFERENCES users(id),CONSTRAINT chk_bookings_customer_staff CHECK (customer_id != staff_id),
+                          CONSTRAINT fk_bookings_staff FOREIGN KEY (staff_id) REFERENCES users(id),
+                          CONSTRAINT chk_bookings_customer_staff CHECK (customer_id != staff_id),
 
                 CONSTRAINT chk_bookings_status CHECK (
                      status IN ('PENDING', 'CONFIRMED', 'COMPLETED',

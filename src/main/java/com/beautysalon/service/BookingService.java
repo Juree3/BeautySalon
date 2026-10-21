@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -454,8 +455,7 @@ public class BookingService {
 
         return responses;
     }
-
-    @Scheduled(fixedRate = 60000) // svakih 10 minuta
+    @Scheduled(cron = "0 0 * * * *", zone = "Europe/Sarajevo") // svaki sat, u punih sat
     @Transactional
     public void completeExpiredBookings() {
 
@@ -466,7 +466,7 @@ public class BookingService {
 
             LocalDateTime bookingEnd = LocalDateTime.of(booking.getDate(), booking.getEndTime());
 
-            if (LocalDateTime.now().isAfter(bookingEnd)) {
+            if (LocalDateTime.now(ZoneId.of("Europe/Sarajevo")).isAfter(bookingEnd)) {
                 booking.setStatus(BookingStatus.COMPLETED);
                 bookingRepository.save(booking);
             }

@@ -3,6 +3,10 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      minimum-idle: 0        # ne drži nijednu konekciju kad nema posla
+      idle-timeout: 30000    # zatvori neiskorištenu konekciju nakon 30 s
+      keepalive-time: 0      # ne pingaj bazu
   jpa:
     hibernate:
       ddl-auto: validate
