@@ -39,7 +39,7 @@ public class RateLimitService {
 
         Entry entry = store.computeIfAbsent(key, k -> new Entry());
         Instant now = Instant.now();
-
+        System.out.println(entry);
         synchronized (entry) {
             if (entry.blockedUntil != null && now.isBefore(entry.blockedUntil)) {
                 return false;

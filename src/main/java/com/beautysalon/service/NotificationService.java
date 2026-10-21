@@ -66,6 +66,7 @@ public class NotificationService {
         notification.setRead(true);
         notificationRepository.save(notification);
     }
+
     public void deleteNotification(Long notificationId, Long userId) {
 
         Notification notification = notificationRepository.findById(notificationId)
